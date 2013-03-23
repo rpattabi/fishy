@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineAdapter", "EngineAdapter\EngineAdapter.csproj", "{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{70A5B0C3-3663-49E0-AFDF-9E3761F1E744}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70A5B0C3-3663-49E0-AFDF-9E3761F1E744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A5B0C3-3663-49E0-AFDF-9E3761F1E744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A5B0C3-3663-49E0-AFDF-9E3761F1E744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A5B0C3-3663-49E0-AFDF-9E3761F1E744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		BaseDirectory = ..
+		StartupItem = UnitTests\UnitTests.csproj
+		outputpath = build\bin
+	EndGlobalSection
+EndGlobal
