@@ -18,5 +18,10 @@ namespace Fishy.Tests.UnitTests
 			Assert.IsNotEmpty(feedbackLines);
 			Assert.AreEqual(true, feedbackLines[0].Contains("Usage:"));
 		}
+
+		[Test]
+		public void ReturnBestMove_GivenFEN ()
+		{
+		}
 	}
 }

@@ -38,6 +38,14 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="IEngineAdapter.cs" />
     <Compile Include="BaseEngineAdapter.cs" />
+    <Compile Include="UCIEngine.cs" />
+    <Compile Include="Exceptions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="EngineConfigurations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EngineConfigurations\Stockfish.config" />
+  </ItemGroup>
 </Project>
