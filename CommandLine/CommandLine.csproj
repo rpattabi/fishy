@@ -48,4 +48,10 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EngineAdapter\Engine.csproj">
+      <Project>{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}</Project>
+      <Name>Engine</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

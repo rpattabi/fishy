@@ -36,10 +36,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="IEngineAdapter.cs" />
-    <Compile Include="BaseEngineAdapter.cs" />
     <Compile Include="UCIEngine.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="Interfaces.cs" />
+    <Compile Include="BaseEngine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

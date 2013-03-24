@@ -1,14 +1,14 @@
 using System;
 using System.Diagnostics;
-using Fishy.EngineAdapter.Exceptions;
+using Fishy.Engine.Exceptions;
 
-namespace Fishy.EngineAdapter
+namespace Fishy.Engine
 {
-	public abstract class BaseEngineAdapter : IEngineAdapter
+	public abstract class BaseEngine : IEngine
 	{
 		ProcessStartInfo _engineStartInfo;
 
-		public BaseEngineAdapter(ProcessStartInfo engineStartInfo)
+		public BaseEngine(ProcessStartInfo engineStartInfo)
 		{
 			_engineStartInfo = engineStartInfo;
 			UpdateEngineStartInfo();

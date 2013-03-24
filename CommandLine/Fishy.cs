@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Mono.Options;
+using Fishy.Engine;
 
 namespace Fishy.CommandLine
 {
@@ -10,8 +12,9 @@ namespace Fishy.CommandLine
 		string[] _args;
 		string _fen;
 		bool _showHelp;
-
 		OptionSet _options; 
+
+		IUCIEngine _engine;
 
 		public Fishy (string[] args)
 		{
@@ -43,15 +46,21 @@ namespace Fishy.CommandLine
 
 		public string Run ()
 		{
-			if (_showHelp) {
-				return GetUsage();
-			}
+			try {
+				if (_showHelp) {
+					return GetUsage();
+				}
 
-			if (!string.IsNullOrEmpty (_fen)) {
-				return "e2e4";
-			} 
-			else {
-				return GetUsage();
+				if (!string.IsNullOrEmpty (_fen)) {
+					return "e2e4";
+				} 
+				else {
+					return GetUsage();
+				}			
+			
+			} finally {
+				if (_engine != null)
+					_engine.Quit();
 			}
 		}
 
@@ -60,6 +69,17 @@ namespace Fishy.CommandLine
 			var stringWriter = new StringWriter();
 			_options.WriteOptionDescriptions (stringWriter);
 			return stringWriter.ToString ();
+		}
+
+		internal IUCIEngine Engine {
+			get {
+				if (_engine == null) {
+					_engine = new UCIEngine (new ProcessStartInfo ("stockfish"));
+					_engine.Start ();
+				}
+
+				return _engine;
+			}
 		}
 	}
 }

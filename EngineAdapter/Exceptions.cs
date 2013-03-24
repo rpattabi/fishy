@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Fishy.EngineAdapter.Exceptions
+namespace Fishy.Engine.Exceptions
 {
 	public class EngineCouldNotBeStartedException : Exception
 	{

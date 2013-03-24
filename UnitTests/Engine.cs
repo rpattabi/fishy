@@ -1,10 +1,10 @@
 using System;
 using NUnit.Framework;
-using Fishy.EngineAdapter;
-using Fishy.EngineAdapter.Exceptions;
+using Fishy.Engine;
+using Fishy.Engine.Exceptions;
 using System.Diagnostics;
 
-namespace Fishy.Tests.UnitTests.EngineAdapter
+namespace Fishy.Tests.UnitTests.Engine
 {
 	[TestFixture]
 	public class UCIEngineTests
