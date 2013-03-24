@@ -9,7 +9,7 @@ namespace Fishy.Engine
 		Stockfish
 	}
 
-	public class UCIEngineInfo
+	internal class UCIEngineInfo
 	{
 		private static Dictionary<EngineKey, UCIEngineInfo> enginesManual = new Dictionary<EngineKey, UCIEngineInfo> {
 			{ EngineKey.Stockfish, new UCIEngineInfo ("stockfish") }
