@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "EngineAdapter\Engine.csproj", "{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{70A5B0C3-3663-49E0-AFDF-9E3761F1E744}"
 EndProject

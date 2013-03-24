@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>EngineAdapter</RootNamespace>
-    <AssemblyName>EngineAdapter</AssemblyName>
+    <RootNamespace>Engine</RootNamespace>
+    <AssemblyName>Engine</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
