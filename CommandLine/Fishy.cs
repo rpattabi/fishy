@@ -74,7 +74,7 @@ namespace Fishy.CommandLine
 		internal IUCIEngine Engine {
 			get {
 				if (_engine == null) {
-					_engine = new UCIEngine (new ProcessStartInfo ("stockfish"));
+					_engine = UCIEngine.Create (EngineKey.Stockfish);
 					_engine.Start ();
 				}
 

@@ -4,22 +4,18 @@ using Fishy.Engine;
 using Fishy.Engine.Exceptions;
 using System.Diagnostics;
 
-namespace Fishy.Tests.UnitTests.Engine
+namespace Fishy.Tests.UnitTests.EngineProcess
 {
 	[TestFixture]
 	public class UCIEngineTests
 	{
-		string _engineProcessName;
-		ProcessStartInfo _stockfishStartInfo;
 		UCIEngine _stockfish;
 
 
 		[SetUp]
 		public void Setup ()
 		{
-			_engineProcessName = "stockfish";
-			_stockfishStartInfo = new ProcessStartInfo(_engineProcessName);
-			_stockfish = new UCIEngine(_stockfishStartInfo);
+			_stockfish = UCIEngine.Create(EngineKey.Stockfish) as UCIEngine;
 		}
 
 		[TearDown]
@@ -31,7 +27,7 @@ namespace Fishy.Tests.UnitTests.Engine
 		[Test]
 		public void Stockfish_ShouldNotBeStarted_OnInstanciation ()
 		{
-			var stockfish = new UCIEngine(_stockfishStartInfo);
+			var stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 			Assert.IsFalse (stockfish.IsStarted);
 		}
 
@@ -47,9 +43,9 @@ namespace Fishy.Tests.UnitTests.Engine
 		{
 			_stockfish.Start ();
 
-			Assert.IsNotNull (_stockfish.Engine);
+			Assert.IsNotNull (_stockfish.EngineProcess);
 			Assert.IsTrue (_stockfish.IsStarted);
-			Assert.IsFalse (_stockfish.Engine.HasExited);
+			Assert.IsFalse (_stockfish.EngineProcess.HasExited);
 		}
 
 		[Test]
@@ -57,7 +53,7 @@ namespace Fishy.Tests.UnitTests.Engine
 		{
 			_stockfish.Start ();
 
-			Assert.IsFalse (_stockfish.Engine.HasExited);
+			Assert.IsFalse (_stockfish.EngineProcess.HasExited);
 
 			//
 			// Not sure what is the right practice here.
@@ -66,7 +62,7 @@ namespace Fishy.Tests.UnitTests.Engine
 			timer.Start();
 
 			while (timer.ElapsedMilliseconds <= 5 * 1000)
-				Assert.IsFalse (_stockfish.Engine.HasExited);
+				Assert.IsFalse (_stockfish.EngineProcess.HasExited);
 
 			timer.Stop ();
 		}
@@ -74,12 +70,13 @@ namespace Fishy.Tests.UnitTests.Engine
 		[Test]
 		public void OnQuit_ProcessShouldBeTerminated ()
 		{
-			var stockfishesBefore = Process.GetProcessesByName (_engineProcessName);
+			var stockfishProcess = UCIEngineInfo.GetInfo (EngineKey.Stockfish).ProcessName;
+			var stockfishesBefore = Process.GetProcessesByName (stockfishProcess);
 
 			_stockfish.Start ();
 			_stockfish.Quit();
 
-			var stockfishesAfter = Process.GetProcessesByName (_engineProcessName);
+			var stockfishesAfter = Process.GetProcessesByName (stockfishProcess);
 
 			Assert.AreEqual (stockfishesBefore, stockfishesAfter);
 		}
@@ -89,7 +86,7 @@ namespace Fishy.Tests.UnitTests.Engine
 		{
 			for (int i = 0; i < 10; ++i) {
 				Assert.DoesNotThrow( () => _stockfish.Start ());
-				Assert.IsFalse (_stockfish.Engine.HasExited);
+				Assert.IsFalse (_stockfish.EngineProcess.HasExited);
 
 				Assert.DoesNotThrow ( () => _stockfish.Quit ());
 			}

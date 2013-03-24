@@ -18,13 +18,13 @@ namespace Fishy.Engine
 		{
 			if (this.IsStarted) return;
 
-			this.Engine = new Process();
-			this.Engine.StartInfo = _engineStartInfo;
+			this.EngineProcess = new Process();
+			this.EngineProcess.StartInfo = _engineStartInfo;
 
 			bool success;
 
 			try {
-				success = this.Engine.Start ();
+				success = this.EngineProcess.Start ();
 
 			} catch (System.ComponentModel.Win32Exception ex) {
 				throw new EngineCouldNotBeStartedException(_engineStartInfo.FileName, ex);
@@ -41,17 +41,17 @@ namespace Fishy.Engine
 			if (!this.IsStarted) return;
 
 			try {
-				this.Engine.Kill ();
-				this.Engine.StandardError.ReadToEnd();
-				this.Engine.WaitForExit ();
+				this.EngineProcess.Kill ();
+				this.EngineProcess.StandardError.ReadToEnd();
+				this.EngineProcess.WaitForExit ();
 
 			} finally {
-				this.Engine = null;
+				this.EngineProcess = null;
 				this.IsStarted = false;			
 			}
 		}
 
-		public Process Engine { get; private set; }
+		internal Process EngineProcess { get; private set; }
 
 		internal bool IsStarted { get; set; }
 
