@@ -22,6 +22,14 @@ namespace Fishy.Tests.UnitTests
 		[Test]
 		public void ReturnBestMove_GivenFEN ()
 		{
+			string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+			string[] args = {"-fen", fen};
+
+			var fishy = new Fishy.CommandLine.Fishy(args);
+			string bestMove = fishy.Run ();
+
+			Assert.AreEqual ("e2e4", bestMove);
 		}
 	}
 }

@@ -1,18 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/UnitTests/EngineAdapter.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/CommandLine/Fishy.cs">
     <Files>
-      <File FileName="fishy/EngineAdapter/AssemblyInfo.cs" Line="29" Column="1" />
-      <File FileName="fishy/EngineAdapter/BaseEngineAdapter.cs" Line="25" Column="1" />
-      <File FileName="fishy/EngineAdapter/IEngineAdapter.cs" Line="10" Column="1" />
-      <File FileName="fishy/CommandLine/Main.cs" Line="11" Column="31" />
-      <File FileName="fishy/CommandLine/Mono.Options/Options.cs" Line="156" Column="1" />
-      <File FileName="fishy/UnitTests/CommandLine.cs" Line="25" Column="3" />
-      <File FileName="fishy/CommandLine/Fishy.cs" Line="20" Column="24" />
-      <File FileName="fishy/UnitTests/EngineAdapter.cs" Line="46" Column="42" />
-      <File FileName="fishy/EngineAdapter/Stockfish/config.xml" Line="3" Column="35" />
-      <File FileName="fishy/EngineAdapter/Stockfish/Stockfish.cs" Line="10" Column="2" />
-      <File FileName="fishy/CommandLine/AssemblyInfo.cs" Line="29" Column="2" />
+      <File FileName="fishy/UnitTests/EngineAdapter.cs" Line="18" Column="23" />
+      <File FileName="fishy/EngineAdapter/BaseEngineAdapter.cs" Line="27" Column="4" />
+      <File FileName="fishy/EngineAdapter/Exceptions.cs" Line="12" Column="2" />
+      <File FileName="fishy/EngineAdapter/UCIEngine.cs" Line="10" Column="3" />
+      <File FileName="fishy/UnitTests/CommandLine.cs" Line="22" Column="3" />
+      <File FileName="fishy/CommandLine/Fishy.cs" Line="40" Column="4" />
+      <File FileName="fishy/CommandLine/Main.cs" Line="1" Column="1" />
+      <File FileName="fishy/CommandLine/Mono.Options/Options.cs" Line="1148" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -20,12 +17,9 @@
           <Node name="CommandLine" expanded="True">
             <Node name="Mono.Options" expanded="True" />
           </Node>
-          <Node name="EngineAdapter" expanded="True">
-            <Node name="Stockfish" expanded="True" />
-          </Node>
-          <Node name="UnitTests" expanded="True">
+          <Node name="EngineAdapter" expanded="True" />
+          <Node name="UnitTests" expanded="True" selected="True">
             <Node name="References" expanded="True" />
-            <Node name="EngineAdapter.cs" selected="True" />
           </Node>
         </State>
       </Pad>
@@ -41,12 +35,10 @@
             <Node name="Fishy" expanded="True">
               <Node name="Tests" expanded="True">
                 <Node name="UnitTests" expanded="True">
-                  <Node name="CommandLineTests" expanded="True" />
-                  <Node name="EngineAdapter" expanded="True">
-                    <Node name="StockfishTests" expanded="True">
-                      <Node name="RepeatedlyStoppingAndStarting_ShouldWork" selected="True" />
-                    </Node>
+                  <Node name="CommandLineTests" expanded="True">
+                    <Node name="ReturnBestMove_GivenFEN" selected="True" />
                   </Node>
+                  <Node name="EngineAdapter" expanded="True" />
                 </Node>
               </Node>
             </Node>
@@ -56,10 +48,7 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/EngineAdapter.cs" line="45" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/EngineAdapter.cs" line="19" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

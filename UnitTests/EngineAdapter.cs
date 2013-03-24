@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Fishy.Tests.UnitTests.EngineAdapter
 {
 	[TestFixture]
-	public class StockfishTests
+	public class UCIEngineTests
 	{
 		string _engineProcessName;
 		ProcessStartInfo _stockfishStartInfo;
