@@ -1,9 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/CommandLine/Fishy.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/Engine/BaseEngine.cs">
     <Files>
-      <File FileName="fishy/CommandLine/Fishy.cs" Line="64" Column="4" />
-      <File FileName="fishy/UnitTests/Engine.cs" Line="13" Column="39" />
+      <File FileName="fishy/Engine/BaseEngine.cs" Line="84" Column="3" />
+      <File FileName="fishy/Engine/UCIEngine.cs" Line="83" Column="1" />
+      <File FileName="fishy/UnitTests/Engine.cs" Line="82" Column="3" />
+      <File FileName="fishy/Engine/Interfaces.cs" Line="14" Column="2" />
+      <File FileName="fishy/UnitTests/CommandLine.cs" Line="25" Column="74" />
+      <File FileName="fishy/CommandLine/Fishy.cs" Line="72" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -12,7 +16,9 @@
             <Node name="References" expanded="True" />
             <Node name="Mono.Options" expanded="True" />
           </Node>
-          <Node name="Engine" expanded="True" selected="True" />
+          <Node name="Engine" expanded="True">
+            <Node name="BaseEngine.cs" selected="True" />
+          </Node>
           <Node name="UnitTests" expanded="True">
             <Node name="References" expanded="True" />
           </Node>
@@ -25,12 +31,26 @@
         <State />
       </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State expanded="True" selected="True" />
+        <State expanded="True">
+          <Node name="UnitTests" expanded="True">
+            <Node name="Fishy" expanded="True">
+              <Node name="Tests" expanded="True">
+                <Node name="UnitTests" expanded="True">
+                  <Node name="CommandLineTests" expanded="True">
+                    <Node name="ReturnBestMove_GivenFEN" selected="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/ragu/code/fishy/Engine/BaseEngine.cs" line="88" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

@@ -52,7 +52,7 @@ namespace Fishy.CommandLine
 				}
 
 				if (!string.IsNullOrEmpty (_fen)) {
-					return "e2e4";
+					return this.Engine.GiveBestMove (_fen);
 				} 
 				else {
 					return GetUsage();
@@ -75,6 +75,9 @@ namespace Fishy.CommandLine
 			get {
 				if (_engine == null) {
 					_engine = UCIEngine.Create (EngineKey.Stockfish);
+				}
+
+				if (!_engine.IsStarted) {
 					_engine.Start ();
 				}
 

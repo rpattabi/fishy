@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Fishy.Engine
 {
@@ -50,9 +53,54 @@ namespace Fishy.Engine
 		{
 		}
 
-		public string GiveBestMove (string fen, long duration = 20)
+		internal StreamWriter ToEngine {
+			get {
+				return this.EngineProcess.StandardInput;
+			}
+		}
+
+		internal StreamReader FromEngine {
+			get {
+				return this.EngineProcess.StandardOutput;
+			}
+		}
+
+		internal void SendCommand (string command)
 		{
-			return "e2e4";
+			this.ToEngine.WriteLine ("stop");
+			this.ToEngine.WriteLine (command);
+			this.EngineProcess.WaitForInputIdle ();
+		}
+
+		public string GiveBestMove (string fen, long duration = 5)
+		{
+			try {
+			
+				this.ClearOutput();
+				this.EngineProcess.BeginOutputReadLine ();
+					
+				SendCommand ("position fen " + fen);
+				SendCommand ("go infinite"); wait (duration);
+				SendCommand ("stop");
+
+				return ExtractBestMove (this.Output);
+
+			} finally {
+				SendCommand ("quit");
+			}
+		}
+
+		internal static string ExtractBestMove (string engineOutput)
+		{
+			return Regex.Match (engineOutput, "bestmove ([a-h1-8]{4})").Groups[1].Value;
+		}
+
+		internal void wait (long duration)
+		{
+			var timer = Stopwatch.StartNew ();
+			while (timer.ElapsedMilliseconds <= duration * 1000)
+				; //TODO: Is there a better approach?
+			timer.Stop ();
 		}
 	}
 }

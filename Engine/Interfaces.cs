@@ -7,6 +7,10 @@ namespace Fishy.Engine
 	{
 		void Start();
 		void Quit();
+		bool IsStarted { get; }
+
+		string Output { get; }
+		void ClearOutput();
 	}
 
 	public interface IUCIEngine : IEngine

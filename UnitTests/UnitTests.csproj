@@ -18,7 +18,7 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -48,7 +48,7 @@
       <Project>{E43A8FE1-8F78-4690-9D8A-225B2E5476AA}</Project>
       <Name>CommandLine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EngineAdapter\Engine.csproj">
+    <ProjectReference Include="..\Engine\Engine.csproj">
       <Project>{82BF867E-E581-47C9-AD67-EF1A70EDFCAB}</Project>
       <Name>Engine</Name>
     </ProjectReference>
