@@ -73,7 +73,7 @@ namespace Fishy.Engine
 			this.EngineProcess.WaitForInputIdle ();
 		}
 
-		public async Task<string> GiveBestMove (string fen, int duration = 5)
+		public async Task<string> GiveBestMove (string fen, int duration)
 		{
 			try {
 			

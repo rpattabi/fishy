@@ -16,7 +16,7 @@ namespace Fishy.Engine
 
 	public interface IUCIEngine : IEngine
 	{
-		Task<string> GiveBestMove(string fen, int duration = 20);
+		Task<string> GiveBestMove(string fen, int duration);
 	}
 }
 

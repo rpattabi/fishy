@@ -17,9 +17,10 @@ namespace Fishy.CommandLine
 
 		IUCIEngine _engine;
 
-		public Fishy (string[] args)
+		public Fishy (string[] args, IUCIEngine uciEngine)
 		{
 			_args = args;
+			_engine = uciEngine;
 
 			_options = new OptionSet() {
 				"Usage:",
@@ -53,7 +54,7 @@ namespace Fishy.CommandLine
 				}
 
 				if (!string.IsNullOrEmpty (_fen)) {
-					var task = this.Engine.GiveBestMove (_fen);
+					var task = this.Engine.GiveBestMove (_fen, duration: 20); // TODO: Main program should decide this
 					return task.Result;
 				} 
 				else {
