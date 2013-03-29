@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using NUnit.Framework;
 using Fishy.Engine;
 using Fishy.Engine.Exceptions;
@@ -55,6 +56,8 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 
 			Assert.IsFalse (_stockfish.EngineProcess.HasExited);
 
+			Thread.Sleep (2 * 1000);
+
 			//
 			// Not sure what is the right practice here.
 			//
@@ -74,11 +77,18 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 			var stockfishesBefore = Process.GetProcessesByName (stockfishProcess);
 
 			_stockfish.Start ();
-			_stockfish.Quit();
+			_stockfish.Quit ();
 
 			var stockfishesAfter = Process.GetProcessesByName (stockfishProcess);
 
-			Assert.AreEqual (stockfishesBefore, stockfishesAfter);
+			//CollectionAssert.AreEquivalent (stockfishesBefore, stockfishesAfter);
+			Assert.AreEqual (stockfishesBefore.Length, stockfishesAfter.Length);
+
+			int i = 0;
+			foreach (var stockfish in stockfishesBefore) {
+				Assert.AreEqual (stockfish.Id, stockfishesAfter [i].Id);
+				++i;
+			}
 		}
 
 		[Test]
