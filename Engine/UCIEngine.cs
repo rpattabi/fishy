@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 namespace Fishy.Engine
@@ -72,7 +73,7 @@ namespace Fishy.Engine
 			this.EngineProcess.WaitForInputIdle ();
 		}
 
-		public string GiveBestMove (string fen, long duration = 5)
+		public async Task<string> GiveBestMove (string fen, int duration = 5)
 		{
 			try {
 			
@@ -80,8 +81,8 @@ namespace Fishy.Engine
 				this.EngineProcess.BeginOutputReadLine ();
 					
 				SendCommand ("position fen " + fen);
-				SendCommand ("go infinite"); wait (duration);
-				SendCommand ("stop");
+				SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
+				SendCommand ("stop"); await Task.Run ( () => { while(!this.Output.Contains ("bestmove")); });
 
 				return ExtractBestMove (this.Output);
 
@@ -93,14 +94,6 @@ namespace Fishy.Engine
 		internal static string ExtractBestMove (string engineOutput)
 		{
 			return Regex.Match (engineOutput, "bestmove ([a-h1-8]{4})").Groups[1].Value;
-		}
-
-		internal void wait (long duration)
-		{
-			var timer = Stopwatch.StartNew ();
-			while (timer.ElapsedMilliseconds <= duration * 1000)
-				; //TODO: Is there a better approach?
-			timer.Stop ();
 		}
 	}
 }

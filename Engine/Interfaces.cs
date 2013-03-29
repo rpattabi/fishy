@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Fishy.Engine
 {
@@ -15,7 +16,7 @@ namespace Fishy.Engine
 
 	public interface IUCIEngine : IEngine
 	{
-		string GiveBestMove(string fen, long duration = 20);
+		Task<string> GiveBestMove(string fen, int duration = 20);
 	}
 }
 

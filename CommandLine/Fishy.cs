@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Mono.Options;
+using System.Threading.Tasks;
 using Fishy.Engine;
 
 namespace Fishy.CommandLine
@@ -44,7 +45,7 @@ namespace Fishy.CommandLine
 			}
 		}
 
-		public string Run ()
+		public async Task<string> Run ()
 		{
 			try {
 				if (_showHelp) {
@@ -52,7 +53,7 @@ namespace Fishy.CommandLine
 				}
 
 				if (!string.IsNullOrEmpty (_fen)) {
-					return this.Engine.GiveBestMove (_fen);
+					return await this.Engine.GiveBestMove (_fen);
 				} 
 				else {
 					return GetUsage();

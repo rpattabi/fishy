@@ -89,9 +89,9 @@ namespace Fishy.Engine
 		{
 			_engineOutput.AppendLine(TimeStamp() +  eventArgs.Data);
 
-			using (var log = new StreamWriter ("/tmp/stockfish.log", append: true)) {
-				log.WriteLine (TimeStamp() + eventArgs.Data);
-			}
+			//using (var log = new StreamWriter ("/tmp/stockfish.log", append: true)) {
+			//	log.WriteLine (TimeStamp() + eventArgs.Data);
+			//}
 		}
 
 		private string TimeStamp ()
@@ -101,9 +101,9 @@ namespace Fishy.Engine
 
 		public string Output {
 			get {
-				using (var log = new StreamWriter ("/tmp/stockfish_engineOutput.log", append: false)) {
-					log.Write (TimeStamp() + _engineOutput.ToString ());
-				}
+				//using (var log = new StreamWriter ("/tmp/stockfish_engineOutput.log", append: false)) {
+				//	log.Write (TimeStamp() + _engineOutput.ToString ());
+				//}
 
 				return _engineOutput.ToString ();
 			}				
