@@ -45,7 +45,7 @@ namespace Fishy.CommandLine
 			}
 		}
 
-		public async Task<string> Run ()
+		public string Run ()
 		{
 			try {
 				if (_showHelp) {
@@ -53,7 +53,8 @@ namespace Fishy.CommandLine
 				}
 
 				if (!string.IsNullOrEmpty (_fen)) {
-					return await this.Engine.GiveBestMove (_fen);
+					var task = this.Engine.GiveBestMove (_fen);
+					return task.Result;
 				} 
 				else {
 					return GetUsage();
@@ -87,4 +88,3 @@ namespace Fishy.CommandLine
 		}
 	}
 }
-

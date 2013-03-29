@@ -91,7 +91,7 @@ namespace Fishy.Engine
 			}
 		}
 
-		internal static string ExtractBestMove (string engineOutput)
+		public static string ExtractBestMove (string engineOutput)
 		{
 			return Regex.Match (engineOutput, "bestmove ([a-h1-8]{4})").Groups[1].Value;
 		}
