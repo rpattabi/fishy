@@ -45,6 +45,14 @@ namespace Fishy.Engine
 			}
 		}
 
+		public string GiveBestMove (string fen, int duration)
+		{
+			if (!this.IsStarted) this.Start();
+
+			var task = this.GiveBestMoveAsync (fen, duration);
+			return task.Result;
+		}
+
 		private static IUCIEngine CreateStockfish ()
 		{
 			return new UCIEngine (new ProcessStartInfo ("stockfish")) as IUCIEngine;
@@ -73,22 +81,16 @@ namespace Fishy.Engine
 			this.EngineProcess.WaitForInputIdle ();
 		}
 
-		public async Task<string> GiveBestMove (string fen, int duration)
+		internal async Task<string> GiveBestMoveAsync (string fen, int duration)
 		{
-			try {
-			
-				this.ClearOutput();
-				this.EngineProcess.BeginOutputReadLine ();
-					
-				SendCommand ("position fen " + fen);
-				SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
-				SendCommand ("stop"); await Task.Run ( () => { while(!this.Output.Contains ("bestmove")); });
+			this.ClearOutput();
+			this.EngineProcess.BeginOutputReadLine ();
+				
+			SendCommand ("position fen " + fen);
+			SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
+			SendCommand ("stop"); await Task.Run ( () => { while(!this.Output.Contains ("bestmove")); });
 
-				return ExtractBestMove (this.Output);
-
-			} finally {
-				SendCommand ("quit");
-			}
+			return ExtractBestMove (this.Output);
 		}
 
 		public static string ExtractBestMove (string engineOutput)

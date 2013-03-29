@@ -29,6 +29,6 @@ Global
 	GlobalSection(MonoDevelopProperties) = preSolution
 		BaseDirectory = ..
 		StartupItem = UnitTests\UnitTests.csproj
-		outputpath = build\bin
+		outputpath = bin
 	EndGlobalSection
 EndGlobal

@@ -10,21 +10,6 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 	[TestFixture]
 	public class UCIEngineTests
 	{
-		UCIEngine _stockfish;
-
-
-		[SetUp]
-		public void Setup ()
-		{
-			_stockfish = UCIEngine.Create(EngineKey.Stockfish) as UCIEngine;
-		}
-
-		[TearDown]
-		public void TearDown ()
-		{
-			_stockfish.Quit ();
-		}
-
 		[Test]
 		public void Stockfish_ShouldNotBeStarted_OnInstanciation ()
 		{
@@ -42,32 +27,44 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 		[Test]
 		public void OnStarting_EngineProcessShouldNotBeNull()
 		{
-			_stockfish.Start ();
+			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
-			Assert.IsNotNull (_stockfish.EngineProcess);
-			Assert.IsTrue (_stockfish.IsStarted);
-			Assert.IsFalse (_stockfish.EngineProcess.HasExited);
+			try {
+				stockfish.Start ();
+
+				Assert.IsNotNull (stockfish.EngineProcess);
+				Assert.IsTrue (stockfish.IsStarted);
+				Assert.IsFalse (stockfish.EngineProcess.HasExited);			
+
+			} finally {
+				stockfish.Quit ();
+			}
 		}
 
 		[Test]
 		public void AfterStarting_EngineShouldBeKeptAlive ()
 		{
-			_stockfish.Start ();
+			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
-			Assert.IsFalse (_stockfish.EngineProcess.HasExited);
+			try {
+				stockfish.Start ();
 
-			Thread.Sleep (2 * 1000);
+				Assert.IsFalse (stockfish.EngineProcess.HasExited);
 
-			//
-			// Not sure what is the right practice here.
-			//
-			var timer = new Stopwatch();
-			timer.Start();
+				//
+				// Not sure what is the right practice here.
+				//
+				var timer = new Stopwatch();
+				timer.Start();
 
-			while (timer.ElapsedMilliseconds <= 5 * 1000)
-				Assert.IsFalse (_stockfish.EngineProcess.HasExited);
+				while (timer.ElapsedMilliseconds <= 5 * 1000)
+					Assert.IsFalse (stockfish.EngineProcess.HasExited);
 
-			timer.Stop ();
+				timer.Stop ();			
+
+			} finally {
+				stockfish.Quit ();
+			}
 		}
 
 		[Test]
@@ -76,8 +73,9 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 			var stockfishProcess = UCIEngineInfo.GetInfo (EngineKey.Stockfish).ProcessName;
 			var stockfishesBefore = Process.GetProcessesByName (stockfishProcess);
 
-			_stockfish.Start ();
-			_stockfish.Quit ();
+			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
+			stockfish.Start ();
+			stockfish.Quit ();
 
 			var stockfishesAfter = Process.GetProcessesByName (stockfishProcess);
 
@@ -85,8 +83,8 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 			Assert.AreEqual (stockfishesBefore.Length, stockfishesAfter.Length);
 
 			int i = 0;
-			foreach (var stockfish in stockfishesBefore) {
-				Assert.AreEqual (stockfish.Id, stockfishesAfter [i].Id);
+			foreach (var process in stockfishesBefore) {
+				Assert.AreEqual (process.Id, stockfishesAfter [i].Id);
 				++i;
 			}
 		}
@@ -94,11 +92,40 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 		[Test]
 		public void RepeatedlyStoppingAndStarting_ShouldWork ()
 		{
-			for (int i = 0; i < 10; ++i) {
-				Assert.DoesNotThrow( () => _stockfish.Start ());
-				Assert.IsFalse (_stockfish.EngineProcess.HasExited);
+			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
-				Assert.DoesNotThrow ( () => _stockfish.Quit ());
+			for (int i = 0; i < 10; ++i) {
+				Assert.DoesNotThrow( () => stockfish.Start ());
+				Assert.IsFalse (stockfish.EngineProcess.HasExited);
+
+				Assert.DoesNotThrow ( () => stockfish.Quit ());
+			}
+		}
+
+		[Test]
+		public void GiveBestMove_GivenFEN ()
+		{
+			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
+
+			try {
+				int duration = 1;
+
+				// back rank mate
+				string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+				string expected = "e5e8";
+
+				string bestMove = stockfish.GiveBestMove (fen, duration);
+				Assert.AreEqual (expected, bestMove);
+
+				// smothered mate
+				fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+				expected = "d5c7";
+
+				bestMove = stockfish.GiveBestMove (fen, duration);
+				Assert.AreEqual (expected, bestMove);			
+
+			} finally {
+				stockfish.Quit ();
 			}
 		}
 	}

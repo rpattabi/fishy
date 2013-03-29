@@ -89,7 +89,7 @@ namespace Fishy.Tests.UnitTests
 
 			_uciMock.Setup (e => e
 			    .GiveBestMove(It.IsAny<string>(), It.IsAny<int>()))
-				.Returns (() => Task.FromResult (expected));
+				.Returns (() => expected);
 
 			var fishy = new Fishy.CommandLine.Fishy(args, _engine);
 			string bestMove = fishy.Run ();

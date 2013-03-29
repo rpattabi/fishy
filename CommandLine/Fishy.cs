@@ -54,8 +54,7 @@ namespace Fishy.CommandLine
 				}
 
 				if (!string.IsNullOrEmpty (_fen)) {
-					var task = this.Engine.GiveBestMove (_fen, duration: 20); // TODO: Main program should decide this
-					return task.Result;
+					return this.Engine.GiveBestMove (_fen, duration: 20); // TODO: Main program should decide this
 				} 
 				else {
 					return GetUsage();

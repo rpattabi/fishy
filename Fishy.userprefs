@@ -2,12 +2,15 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="fishy/Engine/UCIEngine.cs">
     <Files>
-      <File FileName="fishy/Engine/BaseEngine.cs" Line="99" Column="16" />
-      <File FileName="fishy/Engine/UCIEngine.cs" Line="81" Column="5" />
-      <File FileName="fishy/UnitTests/Engine.cs" Line="82" Column="3" />
-      <File FileName="fishy/Engine/Interfaces.cs" Line="14" Column="2" />
-      <File FileName="fishy/UnitTests/CommandLine.cs" Line="25" Column="74" />
-      <File FileName="fishy/CommandLine/Fishy.cs" Line="72" Column="3" />
+      <File FileName="fishy/Engine/BaseEngine.cs" Line="69" Column="1" />
+      <File FileName="fishy/UnitTests/Engine.cs" Line="111" Column="21" />
+      <File FileName="fishy/Engine/UCIEngine.cs" Line="53" Column="1" />
+      <File FileName="fishy/Engine/Interfaces.cs" Line="19" Column="10" />
+      <File FileName="fishy/UnitTests/CommandLine.cs" Line="108" Column="10" />
+      <File FileName="fishy/CommandLine/Fishy.cs" Line="58" Column="5" />
+      <File FileName="../../../opt/mono-3.0/mono/mcs/class/System/System.Diagnostics/Process.cs" Line="780" Column="1" />
+      <File FileName="fishy/CommandLine/Main.cs" Line="21" Column="2" />
+      <File FileName="../../../opt/mono-3.0/mono/mcs/class/corlib/System.Threading.Tasks/Task_T.cs" Line="53" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,8 +19,10 @@
             <Node name="References" expanded="True" />
             <Node name="Mono.Options" expanded="True" />
           </Node>
-          <Node name="Engine" expanded="True" />
-          <Node name="UnitTests" expanded="True" selected="True">
+          <Node name="Engine" expanded="True">
+            <Node name="UCIEngine.cs" selected="True" />
+          </Node>
+          <Node name="UnitTests" expanded="True">
             <Node name="References" expanded="True" />
           </Node>
         </State>
@@ -30,11 +35,16 @@
       </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
         <State expanded="True">
-          <Node name="UnitTests" expanded="True" selected="True">
+          <Node name="UnitTests" expanded="True">
             <Node name="Fishy" expanded="True">
               <Node name="Tests" expanded="True">
                 <Node name="UnitTests" expanded="True">
                   <Node name="CommandLineTests" expanded="True" />
+                  <Node name="EngineProcess" expanded="True">
+                    <Node name="UCIEngineTests" expanded="True">
+                      <Node name="GiveBestMove_GivenFEN" selected="True" />
+                    </Node>
+                  </Node>
                 </Node>
               </Node>
             </Node>
@@ -46,7 +56,11 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/home/ragu/code/fishy/Engine/BaseEngine.cs" line="88" />
-      <Breakpoint file="/home/ragu/code/fishy/Engine/UCIEngine.cs" line="62" />
+      <Breakpoint file="/home/ragu/code/fishy/Engine/UCIEngine.cs" line="71" />
+      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="60" />
+      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="69" />
+      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="78" />
+      <Breakpoint file="/home/ragu/code/fishy/Engine/UCIEngine.cs" line="88" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
