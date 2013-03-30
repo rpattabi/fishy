@@ -45,13 +45,15 @@ namespace Fishy.Engine
 			}
 		}
 
-		public string GiveBestMove (string fen, int duration)
+		public override void Start ()
 		{
-			if (!this.IsStarted) this.Start();
+			base.Start ();
 
-			var task = this.GiveBestMoveAsync (fen, duration);
-			return task.Result;
+			if (this.UCISettings == null)
+				PutInUCIMode ();
 		}
+
+		public UCISettings UCISettings { get; private set; }
 
 		private static IUCIEngine CreateStockfish ()
 		{
@@ -68,6 +70,15 @@ namespace Fishy.Engine
 			}
 		}
 
+		internal void Prepare ()
+		{
+			if (!this.IsStarted) 
+				this.Start ();
+
+			this.ClearOutput ();
+			this.EngineProcess.BeginOutputReadLine ();
+		}
+
 		internal void SendCommand (string command)
 		{
 			this.ToEngine.WriteLine ("stop");
@@ -75,21 +86,47 @@ namespace Fishy.Engine
 			this.EngineProcess.WaitForInputIdle ();
 		}
 
+		public string GiveBestMove (string fen, int duration)
+		{
+			Prepare ();
+
+			var task = GiveBestMoveAsync (fen, duration);
+			return task.Result;
+		}
+
 		internal async Task<string> GiveBestMoveAsync (string fen, int duration)
 		{
-			this.ClearOutput();
-			this.EngineProcess.BeginOutputReadLine ();
-				
 			SendCommand ("position fen " + fen);
 			SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
-			SendCommand ("stop"); await Task.Run ( () => { while(!this.Output.Contains ("bestmove")); });
+			SendCommand ("stop"); await For ("bestmove");
 
 			return ExtractBestMove (this.Output);
+		}
+
+		internal void PutInUCIMode ()
+		{
+			Prepare ();
+
+			var task = PutInUCIModeAsync ();
+			this.UCISettings = new UCISettings(task.Result);
+		}
+
+		internal async Task<string> PutInUCIModeAsync ()
+		{
+			SendCommand ("uci");
+			await For ("uciok");
+
+			return this.Output;
 		}
 
 		public static string ExtractBestMove (string engineOutput)
 		{
 			return Regex.Match (engineOutput, "bestmove ([a-h1-8]{4})").Groups[1].Value;
+		}
+
+		internal Task For (string what)
+		{
+			return Task.Run ( ()=> {while(!this.Output.Contains (what)); } );
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Fishy.Engine
 			_engineOutput = new StringBuilder(); //TODO: Fixed Capacity?
 		}
 
-		public void Start ()
+		public virtual void Start ()
 		{
 			if (this.IsStarted) return;
 

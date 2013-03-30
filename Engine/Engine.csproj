@@ -41,6 +41,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="BaseEngine.cs" />
+    <Compile Include="UCISettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

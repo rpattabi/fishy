@@ -16,6 +16,8 @@ namespace Fishy.Engine
 
 	public interface IUCIEngine : IEngine
 	{
+		UCISettings UCISettings { get; }
+
 		string GiveBestMove(string fen, int duration);
 	}
 }

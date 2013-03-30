@@ -75,6 +75,9 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 			try {
 				stockfish.Start ();
 
+				Assert.IsNotNull (stockfish.UCISettings);
+				StringAssert.StartsWith ("Stockfish", stockfish.UCISettings.Id);
+
 			} finally {
 				stockfish.Quit ();
 			}
