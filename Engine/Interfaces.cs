@@ -24,6 +24,7 @@ namespace Fishy.Engine
 		UCISettings UCISettings { get; }
 		int ThinkingDuration { get; set; }
 		int Depth { get; set; }
+		UCIAnalysisType AnalysisMode { get; set; }
 
 		string GiveBestMove(string fen);
 		IScore GetScore(string fen, string move);
@@ -33,8 +34,11 @@ namespace Fishy.Engine
 	{
 		Task EnableUCIModeAsync();
 
-		Task AnalyseForBestMoveAsync(string fen, int duration);
-		Task AnalyseMoveAsync(string fen, string move, int duration);
+		int Depth { set; }
+		int ThinkingDuration { set; }
+
+		Task AnalyseForBestMoveAsync(string fen);
+		Task AnalyseMoveAsync(string fen, string move);
 	}
 
 	public interface IScore

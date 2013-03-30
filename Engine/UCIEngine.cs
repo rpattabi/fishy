@@ -35,6 +35,9 @@ namespace Fishy.Engine
 
 	public class UCIEngine : BaseEngine, IUCIEngine
 	{	
+		UCIAnalysisType _analysisMode = UCIAnalysisType.TimeBased;
+		IUCICommander _commander;
+
 		public static IUCIEngine Create (EngineKey engineKey)
 		{
 			switch (engineKey) {
@@ -55,19 +58,63 @@ namespace Fishy.Engine
 		}
 
 		public UCISettings UCISettings { get; private set; }
-		public int ThinkingDuration { get; set; }
-		public int Depth { get; set; }
+
+		int _thinkingDuration;
+
+		public int ThinkingDuration { 
+			get {
+				return _thinkingDuration;
+			}
+
+			set {
+				_thinkingDuration = value;
+				_commander.ThinkingDuration = value;
+			}
+		}
+
+		int _depth;
+
+		public int Depth { 
+			get {
+				return _depth;
+			}
+
+			set {
+				_depth = value;
+				_commander.Depth = value;
+			}
+		}
+
+		public UCIAnalysisType AnalysisMode {
+			get {
+				return _analysisMode;
+			}
+
+			set {
+				_analysisMode = value;
+				_commander = GetCommander (_analysisMode);
+			}
+		}
+
+		private IUCICommander GetCommander (UCIAnalysisType analysisMode)
+		{
+			var commander = UCICommander.Create (analysisMode,
+			                                     this as IEngineInternals);
+
+			commander.Depth = this.Depth;
+			commander.ThinkingDuration = this.ThinkingDuration;
+
+			return commander;
+		}
 
 		private static IUCIEngine CreateStockfish ()
 		{
 			return new UCIEngine (new ProcessStartInfo ("stockfish")) as IUCIEngine;
 		}
 
-		IUCICommander _commander;
-
 		internal UCIEngine (ProcessStartInfo engineStartInfo) : base(engineStartInfo)
 		{
-			_commander = UCICommander.Create (UCICommanderType.TimeBased, this);
+			this.AnalysisMode = UCIAnalysisType.TimeBased;
 		}
 
 		private void PrepareEngineForNewCommand ()
@@ -82,7 +129,7 @@ namespace Fishy.Engine
 		{
 			PrepareEngineForNewCommand ();
 
-			var task = _commander.AnalyseForBestMoveAsync (fen, this.ThinkingDuration);
+			var task = _commander.AnalyseForBestMoveAsync (fen);
 			task.Wait ();
 
 			return ExtractBestMove (this.Output);
@@ -116,7 +163,7 @@ namespace Fishy.Engine
 		{
 			PrepareEngineForNewCommand ();
 
-			var task = _commander.AnalyseMoveAsync (fen, move, this.ThinkingDuration);
+			var task = _commander.AnalyseMoveAsync (fen, move);
 			task.Wait ();
 
 			return ExtractScore (this.Output);

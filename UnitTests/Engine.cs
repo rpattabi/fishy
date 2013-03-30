@@ -119,64 +119,150 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 		}
 
 		[Test]
-		public void GiveBestMove_GivenFEN ()
+		public void TimeBasedAnalysis_GiveBestMove_GivenFEN ()
 		{
 			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
 			try {
+				stockfish.AnalysisMode = UCIAnalysisType.TimeBased;
 				stockfish.ThinkingDuration = 1;
 
-				// back rank mate
-				string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
-				string expected = "e5e8";
+				Internal_GiveBestMove_GivenFEN (stockfish);
 
-				string bestMove = stockfish.GiveBestMove (fen);
-				Assert.AreEqual (expected, bestMove);
+			} finally {
+				stockfish.Quit ();
+			}
+		}
+		
+		[Test]
+		public void ResultBasedAnalysis_GiveBestMove_GivenFEN ()
+		{
+			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
-				// smothered mate
-				fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
-				expected = "d5c7";
+			try {
+				stockfish.AnalysisMode = UCIAnalysisType.ResultBased;
+				stockfish.Depth = 20;
 
-				bestMove = stockfish.GiveBestMove (fen);
-				Assert.AreEqual (expected, bestMove);			
+				Internal_GiveBestMove_GivenFEN (stockfish);
 
 			} finally {
 				stockfish.Quit ();
 			}
 		}
 
+		public void Internal_GiveBestMove_GivenFEN (UCIEngine stockfish)
+		{
+			// back rank mate
+			string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			string expected = "e5e8";
+
+			string bestMove = stockfish.GiveBestMove (fen);
+			Assert.AreEqual (expected, bestMove);
+
+			// smothered mate
+			fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			expected = "d5c7";
+
+			bestMove = stockfish.GiveBestMove (fen);
+			Assert.AreEqual (expected, bestMove);			
+		}
+
 		[Test]
-		public void GivenPositionAndAMove_ReturnScore ()
+		public void TimeBasedAnalysis_GivenPositionAndAMove_ReturnScore ()
 		{
 			var stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
 			try {
+				stockfish.AnalysisMode = UCIAnalysisType.TimeBased;
 				stockfish.ThinkingDuration = 1;
 
-				// back rank mate
-				string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
-				string move = "e5e8";
-
-				IScore score = stockfish.GetScore (fen, move);
-				Assert.AreEqual (1.0, score.Value);
-
-				// smothered mate
-				fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
-				move = "d5c7";
-
-				score = stockfish.GetScore (fen, move);
-				Assert.AreEqual (4.0, score.Value);
-
-				// start position
-				fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-				move = "e2e4";
-
-				score = stockfish.GetScore (fen, move);
-				Assert.Greater (score.Value, 1);
+				Internal_GivenPositionAndAMove_ReturnScore (stockfish);
 
 			} finally {
 				stockfish.Quit ();					
 			}		
+		}
+
+		[Test]
+		public void ResultBasedAnalysis_GivenPositionAndAMove_ReturnScore ()
+		{
+			var stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
+
+			try {
+				stockfish.AnalysisMode = UCIAnalysisType.ResultBased;
+				stockfish.Depth = 20;
+
+				Internal_GivenPositionAndAMove_ReturnScore (stockfish);
+
+			} finally {
+				stockfish.Quit ();					
+			}		
+		}
+
+		public void Internal_GivenPositionAndAMove_ReturnScore (UCIEngine stockfish)
+		{
+			// back rank mate
+			string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			string move = "e5e8";
+
+			IScore score = stockfish.GetScore (fen, move);
+			Assert.AreEqual (1.0, score.Value);
+
+			// smothered mate
+			fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			move = "d5c7";
+
+			score = stockfish.GetScore (fen, move);
+			Assert.AreEqual (4.0, score.Value);
+
+			// start position
+			fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+			move = "e2e4";
+
+			score = stockfish.GetScore (fen, move);
+			Assert.Greater (score.Value, 1);
+		}
+
+		[Test]
+		public void AnalysisMode_CanChange ()
+		{
+			var stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
+
+			try {
+				stockfish.Depth = 3;
+				stockfish.ThinkingDuration = 1;
+
+				stockfish.AnalysisMode = UCIAnalysisType.ResultBased;
+
+				Internal_AnalysisMode_CanChange (stockfish);
+
+				stockfish.AnalysisMode = UCIAnalysisType.TimeBased;
+
+				Internal_AnalysisMode_CanChange (stockfish);
+
+				stockfish.AnalysisMode = UCIAnalysisType.TimeBased;
+				stockfish.ThinkingDuration = 2;
+
+				Internal_AnalysisMode_CanChange (stockfish);
+
+				stockfish.AnalysisMode = UCIAnalysisType.ResultBased;
+				stockfish.Depth = 5;
+
+				Internal_AnalysisMode_CanChange (stockfish);
+
+			} finally {
+				stockfish.Quit ();					
+			}		
+		}
+
+		private void Internal_AnalysisMode_CanChange (UCIEngine stockfish)
+		{
+			// back rank mate
+			string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			string move = "e5e8";
+
+			IScore score = stockfish.GetScore (fen, move);
+			Assert.AreEqual (1.0, score.Value);
 		}
 	}
 }

@@ -5,21 +5,22 @@ using System.Threading.Tasks;
 
 namespace Fishy.Engine
 {
-	internal enum UCICommanderType
+	public enum UCIAnalysisType
 	{
-		TimeBased,
-		ResultBased
+		TimeBased, 		// Time boxed
+		ResultBased		// Depth	
 	}
 
 	internal abstract class UCICommander : IUCICommander
 	{
-		public static IUCICommander Create (UCICommanderType type, IEngineInternals engine)
+		public static IUCICommander Create (UCIAnalysisType type, IEngineInternals engine)
 		{
 			switch (type) {
 
-			case UCICommanderType.TimeBased:
+			case UCIAnalysisType.TimeBased:
 				return new TimeBasedCommander (engine);
-			case UCICommanderType.ResultBased:
+
+			case UCIAnalysisType.ResultBased:
 				return new ResultBasedCommander (engine);
 
 			default:
@@ -36,13 +37,13 @@ namespace Fishy.Engine
 
 		public async Task EnableUCIModeAsync ()
 		{
-			SendCommand ("uci");
-			await For ("uciok");
+			SendCommand ("uci"); await For ("uciok");
 		}
 
 		protected void SendCommand (string command)
 		{
 			_engine.CommandChannel.WriteLine ("stop");
+
 			_engine.CommandChannel.WriteLine (command);
 
 			_engine.EngineProcess.WaitForInputIdle ();
@@ -56,50 +57,84 @@ namespace Fishy.Engine
 			});
 		}
 
-		public abstract Task AnalyseForBestMoveAsync (string fen, int duration);
+		public abstract int Depth { set; }
+		public abstract int ThinkingDuration { set; }
 
-		public abstract Task AnalyseMoveAsync (string fen, string move, int duration);
+		public abstract Task AnalyseForBestMoveAsync (string fen);
+		public abstract Task AnalyseMoveAsync (string fen, string move);
 	}
 
 	internal class TimeBasedCommander : UCICommander
 	{
+		int _thinkingTime;
+
+
 		public TimeBasedCommander (IEngineInternals engine) : base(engine)
 		{
+			_thinkingTime = 20;
 		}
 
-		public override async Task AnalyseForBestMoveAsync (string fen, int duration)
+		public override int Depth {
+			set {
+				// Not concerned about Depth
+			}
+		}
+
+		public override int ThinkingDuration {
+			set {
+				_thinkingTime = value;
+			}
+		}
+
+		public override async Task AnalyseForBestMoveAsync (string fen)
 		{
 			SendCommand ("position fen " + fen);
-			SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
-			SendCommand ("stop"); await For ("bestmove");
+
+			SendCommand ("go movetime " + 
+			             _thinkingTime * 1000); await For ("bestmove");
 		}
 		
-		public override async Task AnalyseMoveAsync (string fen, string move, int duration)
+		public override async Task AnalyseMoveAsync (string fen, string move)
 		{
 			SendCommand ("position fen " + fen);
-			SendCommand ("go infinite " + "searchmoves " + move); Thread.Sleep (duration * 1000);
-			SendCommand ("stop"); await For ("bestmove");
+
+			SendCommand ("go movetime " + 
+			             _thinkingTime * 1000 + 
+			             " searchmoves " + move); await For ("bestmove");
 		}
 	}
 
 	internal class ResultBasedCommander : UCICommander
 	{
+		int _depth;
+
+
 		public ResultBasedCommander (IEngineInternals engine) : base(engine)
 		{
-		}
-
-		public override async Task AnalyseForBestMoveAsync (string fen, int duration)
-		{
-			SendCommand ("position fen " + fen);
-			SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
-			SendCommand ("stop"); await For ("bestmove");
+			_depth = 20;
 		}
 		
-		public override async Task AnalyseMoveAsync (string fen, string move, int duration)
+		public override int Depth {
+			set {
+				_depth = value;
+			}
+		}
+
+		public override int ThinkingDuration {
+			set {
+				// Not concerned about Thinking Duration
+			}
+		}
+		public override async Task AnalyseForBestMoveAsync (string fen)
 		{
 			SendCommand ("position fen " + fen);
-			SendCommand ("go infinite " + "searchmoves " + move); Thread.Sleep (duration * 1000);
-			SendCommand ("stop"); await For ("bestmove");
+			SendCommand ("go depth " + _depth); await For ("bestmove");
+		}
+		
+		public override async Task AnalyseMoveAsync (string fen, string move)
+		{
+			SendCommand ("position fen " + fen);
+			SendCommand ("go depth " + _depth + " searchmoves " + move); await For ("bestmove");
 		}
 	}
 }

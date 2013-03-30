@@ -1,14 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/CommandLine/Fishy.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/Engine/UCICommander.cs">
     <Files>
-      <File FileName="fishy/Engine/UCIEngine.cs" Line="60" Column="1" />
-      <File FileName="fishy/UnitTests/Engine.cs" Line="171" Column="11" />
-      <File FileName="fishy/Engine/Interfaces.cs" Line="23" Column="25" />
-      <File FileName="fishy/Engine/Score.cs" Line="1" Column="1" />
-      <File FileName="fishy/CommandLine/Main.cs" Line="47" Column="1" />
-      <File FileName="fishy/CommandLine/Fishy.cs" Line="69" Column="12" />
-      <File FileName="fishy/UnitTests/CommandLine.cs" Line="132" Column="3" />
+      <File FileName="fishy/Engine/UCIEngine.cs" Line="156" Column="30" />
+      <File FileName="fishy/Engine/Interfaces.cs" Line="35" Column="3" />
+      <File FileName="fishy/Engine/UCICommander.cs" Line="29" Column="1" />
+      <File FileName="fishy/Engine/BaseEngine.cs" Line="80" Column="25" />
+      <File FileName="fishy/UnitTests/Engine.cs" Line="79" Column="58" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,9 +14,10 @@
           <Node name="CommandLine" expanded="True">
             <Node name="References" expanded="True" />
             <Node name="Mono.Options" expanded="True" />
-            <Node name="Fishy.cs" selected="True" />
           </Node>
-          <Node name="Engine" expanded="True" />
+          <Node name="Engine" expanded="True">
+            <Node name="UCICommander.cs" selected="True" />
+          </Node>
           <Node name="UnitTests" expanded="True">
             <Node name="References" expanded="True" />
           </Node>
@@ -31,14 +30,11 @@
         <State />
       </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State expanded="True">
+        <State expanded="True" selected="True">
           <Node name="UnitTests" expanded="True">
             <Node name="Fishy" expanded="True">
               <Node name="Tests" expanded="True">
                 <Node name="UnitTests" expanded="True">
-                  <Node name="CommandLineTests" expanded="True">
-                    <Node name="ReturnUsage_WhenHelpIsRequested" selected="True" />
-                  </Node>
                   <Node name="EngineProcess" expanded="True">
                     <Node name="UCIEngineTests" expanded="True" />
                   </Node>
