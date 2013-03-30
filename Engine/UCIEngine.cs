@@ -68,12 +68,6 @@ namespace Fishy.Engine
 			}
 		}
 
-		internal StreamReader FromEngine {
-			get {
-				return this.EngineProcess.StandardOutput;
-			}
-		}
-
 		internal void SendCommand (string command)
 		{
 			this.ToEngine.WriteLine ("stop");

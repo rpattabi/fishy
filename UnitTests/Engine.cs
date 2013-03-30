@@ -68,6 +68,19 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 		}
 
 		[Test]
+		public void AfterStarting_EngineShouldBeSetTo_UCIMode ()
+		{
+			var stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
+
+			try {
+				stockfish.Start ();
+
+			} finally {
+				stockfish.Quit ();
+			}
+		}
+
+		[Test]
 		public void OnQuit_ProcessShouldBeTerminated ()
 		{
 			var stockfishProcess = UCIEngineInfo.GetInfo (EngineKey.Stockfish).ProcessName;
