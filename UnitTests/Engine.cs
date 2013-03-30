@@ -124,20 +124,20 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 			UCIEngine stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
 			try {
-				int duration = 1;
+				stockfish.ThinkingDuration = 1;
 
 				// back rank mate
 				string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
 				string expected = "e5e8";
 
-				string bestMove = stockfish.GiveBestMove (fen, duration);
+				string bestMove = stockfish.GiveBestMove (fen);
 				Assert.AreEqual (expected, bestMove);
 
 				// smothered mate
 				fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
 				expected = "d5c7";
 
-				bestMove = stockfish.GiveBestMove (fen, duration);
+				bestMove = stockfish.GiveBestMove (fen);
 				Assert.AreEqual (expected, bestMove);			
 
 			} finally {
@@ -151,6 +151,8 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 			var stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
 
 			try {
+				stockfish.ThinkingDuration = 1;
+
 				// back rank mate
 				string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
 				string move = "e5e8";

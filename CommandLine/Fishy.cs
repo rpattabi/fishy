@@ -19,7 +19,7 @@ namespace Fishy.CommandLine
 		public bool ShowHelp { get; internal set; }
 		public string Position { get; internal set; }
 		public string Move { get; internal set; }
-		public int ThinkingTime { get; internal set; }
+		public int ThinkingDuration { get; internal set; }
 
 		public bool NeedScore {
 			get {
@@ -43,7 +43,7 @@ namespace Fishy.CommandLine
 		public FishyArgs (string[] args)
 		{
 			_args = args;
-			this.ThinkingTime = DefaultThinkingTime;
+			this.ThinkingDuration = DefaultThinkingTime;
 
 			_options = new OptionSet () {
 				"Usage:",
@@ -54,7 +54,7 @@ namespace Fishy.CommandLine
 				{ "move=", "move to analyse for the given position.",
 					v => this.Move = v },
 				{ "d|duration=", "{DURATION} in seconds to analyze per position. If not given, defaults to 20 seconds.", 
-					(int v) => this.ThinkingTime = v },
+					(int v) => this.ThinkingDuration = v },
 				{ "h|?|help", "show this message and exit",
 					v => this.ShowHelp = v != null },
 			};
@@ -90,7 +90,9 @@ namespace Fishy.CommandLine
 		public Fishy (FishyArgs args, IUCIEngine uciEngine)
 		{
 			_args = args;
+
 			_engine = uciEngine;
+			_engine.ThinkingDuration = _args.ThinkingDuration;
 		}
 
 		public string Run ()
@@ -100,7 +102,7 @@ namespace Fishy.CommandLine
 					return _args.GetUsage();
 
 				if (_args.NeedBestMove)
-					return GetBestMove(_args.Position, _args.ThinkingTime);
+					return GetBestMove(_args.Position);
 
 				if (_args.NeedScore)
 					return GetScore(_args.Position, _args.Move);
@@ -113,9 +115,9 @@ namespace Fishy.CommandLine
 			}
 		}
 
-		internal string GetBestMove (string fen, int duration)
+		internal string GetBestMove (string fen)
 		{
-			return this.Engine.GiveBestMove (fen, duration);
+			return this.Engine.GiveBestMove (fen);
 		}
 
 		internal string GetScore (string fen, string move)
@@ -125,9 +127,12 @@ namespace Fishy.CommandLine
 
 		internal IUCIEngine Engine {
 			get {
+				/*
 				if (_engine == null) {
 					_engine = UCIEngine.Create (EngineKey.Stockfish);
+					_engine.ThinkingDuration = _args.ThinkingDuration;
 				}
+*/
 
 				if (!_engine.IsStarted) {
 					_engine.Start ();

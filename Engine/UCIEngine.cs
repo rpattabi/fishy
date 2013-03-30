@@ -56,6 +56,8 @@ namespace Fishy.Engine
 
 		public UCISettings UCISettings { get; private set; }
 
+		public int ThinkingDuration { get; set; }
+
 		private static IUCIEngine CreateStockfish ()
 		{
 			return new UCIEngine (new ProcessStartInfo ("stockfish")) as IUCIEngine;
@@ -87,11 +89,11 @@ namespace Fishy.Engine
 			this.EngineProcess.WaitForInputIdle ();
 		}
 
-		public string GiveBestMove (string fen, int duration)
+		public string GiveBestMove (string fen)
 		{
 			Prepare ();
 
-			var task = GiveBestMoveAsync (fen, duration);
+			var task = GiveBestMoveAsync (fen, this.ThinkingDuration);
 			return task.Result;
 		}
 
@@ -143,7 +145,7 @@ namespace Fishy.Engine
 		{
 			Prepare ();
 
-			var task = GetScoreAsync (fen, move, 3);
+			var task = GetScoreAsync (fen, move, this.ThinkingDuration);
 			return task.Result;
 		}
 

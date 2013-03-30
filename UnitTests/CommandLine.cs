@@ -92,7 +92,7 @@ namespace Fishy.Tests.UnitTests
 			string expected = "e2e4";
 
 			_uciMock.Setup (e => e
-			    .GiveBestMove(It.IsAny<string>(), It.IsAny<int>()))
+			    .GiveBestMove(It.IsAny<string>()))
 				.Returns (() => expected);
 
 			var fishy = new Fishy.CommandLine.Fishy(fishyArgs, _engine);
@@ -128,7 +128,7 @@ namespace Fishy.Tests.UnitTests
 			var fishy = new Fishy.CommandLine.Fishy(fishyArgs, _engine);
 			fishy.Run ();
 
-			_uciMock.Verify (e => e.GiveBestMove(fen, 20), Times.Once());
+			_uciMock.VerifySet (e => e.ThinkingDuration = 20);
 		}
 
 		[Test]
@@ -142,15 +142,15 @@ namespace Fishy.Tests.UnitTests
 			var fishy = new Fishy.CommandLine.Fishy(fishyArgs, _engine);
 			fishy.Run ();
 
-			_uciMock.Verify (e => e.GiveBestMove(fen, duration), Times.Once());
+			_uciMock.VerifySet (e => e.ThinkingDuration = duration);
 
 			duration = 25;
-			fishyArgs.ThinkingTime = duration;
+			fishyArgs.ThinkingDuration = duration;
 
 			fishy = new Fishy.CommandLine.Fishy(fishyArgs, _engine);
 			fishy.Run ();
 
-			_uciMock.Verify (e => e.GiveBestMove(fen, duration), Times.Once());
+			_uciMock.VerifySet (e => e.ThinkingDuration = duration);
 		}
 
 		[Test]
