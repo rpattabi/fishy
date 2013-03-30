@@ -1,11 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/UnitTests/Engine.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/CommandLine/Fishy.cs">
     <Files>
-      <File FileName="fishy/Engine/UCIEngine.cs" Line="36" Column="15" />
-      <File FileName="fishy/UnitTests/Engine.cs" Line="154" Column="20" />
-      <File FileName="fishy/Engine/Interfaces.cs" Line="22" Column="8" />
-      <File FileName="fishy/Engine/Score.cs" Line="46" Column="49" />
+      <File FileName="fishy/Engine/UCIEngine.cs" Line="60" Column="1" />
+      <File FileName="fishy/UnitTests/Engine.cs" Line="171" Column="11" />
+      <File FileName="fishy/Engine/Interfaces.cs" Line="23" Column="25" />
+      <File FileName="fishy/Engine/Score.cs" Line="1" Column="1" />
+      <File FileName="fishy/CommandLine/Main.cs" Line="47" Column="1" />
+      <File FileName="fishy/CommandLine/Fishy.cs" Line="69" Column="12" />
+      <File FileName="fishy/UnitTests/CommandLine.cs" Line="132" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -13,11 +16,11 @@
           <Node name="CommandLine" expanded="True">
             <Node name="References" expanded="True" />
             <Node name="Mono.Options" expanded="True" />
+            <Node name="Fishy.cs" selected="True" />
           </Node>
           <Node name="Engine" expanded="True" />
           <Node name="UnitTests" expanded="True">
             <Node name="References" expanded="True" />
-            <Node name="Engine.cs" selected="True" />
           </Node>
         </State>
       </Pad>
@@ -28,23 +31,27 @@
         <State />
       </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State expanded="True" selected="True" />
+        <State expanded="True">
+          <Node name="UnitTests" expanded="True">
+            <Node name="Fishy" expanded="True">
+              <Node name="Tests" expanded="True">
+                <Node name="UnitTests" expanded="True">
+                  <Node name="CommandLineTests" expanded="True">
+                    <Node name="ReturnUsage_WhenHelpIsRequested" selected="True" />
+                  </Node>
+                  <Node name="EngineProcess" expanded="True">
+                    <Node name="UCIEngineTests" expanded="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/home/ragu/code/fishy/Engine/BaseEngine.cs" line="88" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="60" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="69" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="78" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="137" />
-      <Breakpoint file="/home/ragu/code/fishy/CommandLine/Fishy.cs" line="25" />
-      <Breakpoint file="/home/ragu/code/fishy/CommandLine/Fishy.cs" line="44" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/CommandLine.cs" line="124" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/Engine.cs" line="111" />
-      <Breakpoint file="/home/ragu/code/fishy/UnitTests/Engine.cs" line="79" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

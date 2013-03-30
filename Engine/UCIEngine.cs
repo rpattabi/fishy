@@ -55,8 +55,8 @@ namespace Fishy.Engine
 		}
 
 		public UCISettings UCISettings { get; private set; }
-
 		public int ThinkingDuration { get; set; }
+		public int Depth { get; set; }
 
 		private static IUCIEngine CreateStockfish ()
 		{

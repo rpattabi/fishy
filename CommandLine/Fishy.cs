@@ -19,7 +19,15 @@ namespace Fishy.CommandLine
 		public bool ShowHelp { get; internal set; }
 		public string Position { get; internal set; }
 		public string Move { get; internal set; }
+
 		public int ThinkingDuration { get; internal set; }
+		public int Depth { get; internal set; }
+
+		public bool IsDepthMode {
+			get {
+				return this.Depth > 0;
+			}
+		}
 
 		public bool NeedScore {
 			get {
@@ -53,7 +61,9 @@ namespace Fishy.CommandLine
 					v => this.Position = v },
 				{ "move=", "move to analyse for the given position.",
 					v => this.Move = v },
-				{ "d|duration=", "{DURATION} in seconds to analyze per position. If not given, defaults to 20 seconds.", 
+				{ "depth=", "{DEPTH} of the search. If mentioned duration option is ignored.",
+					(int v) => this.Depth = v },
+				{ "duration=", "{DURATION} in seconds to analyze per position. If not given, defaults to 20 seconds.", 
 					(int v) => this.ThinkingDuration = v },
 				{ "h|?|help", "show this message and exit",
 					v => this.ShowHelp = v != null },
@@ -71,7 +81,6 @@ namespace Fishy.CommandLine
 				Console.WriteLine ("Try `fishy --help` for more information.");
 				return;
 			}
-
 		}
 
 		public string GetUsage ()
@@ -93,6 +102,7 @@ namespace Fishy.CommandLine
 
 			_engine = uciEngine;
 			_engine.ThinkingDuration = _args.ThinkingDuration;
+			_engine.Depth = _args.Depth;
 		}
 
 		public string Run ()
@@ -127,13 +137,6 @@ namespace Fishy.CommandLine
 
 		internal IUCIEngine Engine {
 			get {
-				/*
-				if (_engine == null) {
-					_engine = UCIEngine.Create (EngineKey.Stockfish);
-					_engine.ThinkingDuration = _args.ThinkingDuration;
-				}
-*/
-
 				if (!_engine.IsStarted) {
 					_engine.Start ();
 				}
