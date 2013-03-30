@@ -144,6 +144,38 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 				stockfish.Quit ();
 			}
 		}
+
+		[Test]
+		public void GivenPositionAndAMove_ReturnScore ()
+		{
+			var stockfish = UCIEngine.Create (EngineKey.Stockfish) as UCIEngine;
+
+			try {
+				// back rank mate
+				string fen = "k3r3/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+				string move = "e5e8";
+
+				IScore score = stockfish.GetScore (fen, move);
+				Assert.AreEqual (1.0, score.Value);
+
+				// smothered mate
+				fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+				move = "d5c7";
+
+				score = stockfish.GetScore (fen, move);
+				Assert.AreEqual (4.0, score.Value);
+
+				// start position
+				fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+				move = "e2e4";
+
+				score = stockfish.GetScore (fen, move);
+				Assert.Greater (score.Value, 1);
+
+			} finally {
+				stockfish.Quit ();					
+			}		
+		}
 	}
 }
 

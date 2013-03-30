@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
@@ -103,6 +104,25 @@ namespace Fishy.Engine
 			return ExtractBestMove (this.Output);
 		}
 
+		public static string ExtractBestMove (string engineOutput)
+		{
+			return Regex.Match (engineOutput, "bestmove ([a-h1-8]{4})").Groups[1].Value;
+		}
+
+		public static IScore ExtractScore (string engineOutput)
+		{
+			var scoreLine = engineOutput
+				.Split (Environment.NewLine.ToCharArray ())
+					.Last (o => o.Contains ("score"));
+
+			return Score.Create (scoreLine);
+		}
+
+		internal Task For (string what)
+		{
+			return Task.Run ( ()=> {while(!this.Output.Contains (what)); } );
+		}
+
 		internal void PutInUCIMode ()
 		{
 			Prepare ();
@@ -119,14 +139,21 @@ namespace Fishy.Engine
 			return this.Output;
 		}
 
-		public static string ExtractBestMove (string engineOutput)
+		public IScore GetScore (string fen, string move)
 		{
-			return Regex.Match (engineOutput, "bestmove ([a-h1-8]{4})").Groups[1].Value;
+			Prepare ();
+
+			var task = GetScoreAsync (fen, move, 3);
+			return task.Result;
 		}
 
-		internal Task For (string what)
+		internal async Task<IScore> GetScoreAsync (string fen, string move, int duration)
 		{
-			return Task.Run ( ()=> {while(!this.Output.Contains (what)); } );
+			SendCommand ("position fen " + fen);
+			SendCommand ("go infinite " + "searchmoves " + move); Thread.Sleep (duration * 1000);
+			SendCommand ("stop"); await For ("bestmove");
+
+			return ExtractScore (this.Output);
 		}
 	}
 }

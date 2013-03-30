@@ -34,6 +34,7 @@
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Package>gtk-sharp-2.0</Package>
     </Reference>
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -42,6 +43,7 @@
     <Compile Include="Interfaces.cs" />
     <Compile Include="BaseEngine.cs" />
     <Compile Include="UCISettings.cs" />
+    <Compile Include="Score.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

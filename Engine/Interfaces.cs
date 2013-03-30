@@ -19,6 +19,12 @@ namespace Fishy.Engine
 		UCISettings UCISettings { get; }
 
 		string GiveBestMove(string fen, int duration);
+		IScore GetScore(string fen, string move);
+	}
+
+	public interface IScore
+	{
+		double Value { get; }
 	}
 }
 
