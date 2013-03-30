@@ -31,7 +31,7 @@ namespace Fishy.Engine
 
 	internal interface IUCICommander
 	{
-		Task PutInUCIModeAsync();
+		Task EnableUCIModeAsync();
 
 		Task AnalyseForBestMoveAsync(string fen, int duration);
 		Task AnalyseMoveAsync(string fen, string move, int duration);

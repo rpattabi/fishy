@@ -51,7 +51,7 @@ namespace Fishy.Engine
 			base.Start ();
 
 			if (this.UCISettings == null)
-				PutInUCIMode ();
+				EnableUCIMode ();
 		}
 
 		public UCISettings UCISettings { get; private set; }
@@ -63,11 +63,11 @@ namespace Fishy.Engine
 			return new UCIEngine (new ProcessStartInfo ("stockfish")) as IUCIEngine;
 		}
 
-		BaseUCICommander _commander;
+		IUCICommander _commander;
 
 		internal UCIEngine (ProcessStartInfo engineStartInfo) : base(engineStartInfo)
 		{
-			_commander = new BaseUCICommander(this);
+			_commander = UCICommander.Create (UCICommanderType.TimeBased, this);
 		}
 
 		private void PrepareEngineForNewCommand ()
@@ -102,11 +102,11 @@ namespace Fishy.Engine
 			return Score.Create (scoreLine);
 		}
 
-		internal void PutInUCIMode ()
+		internal void EnableUCIMode ()
 		{
 			PrepareEngineForNewCommand ();
 
-			var task = _commander.PutInUCIModeAsync ();
+			var task = _commander.EnableUCIModeAsync ();
 			task.Wait ();
 
 			this.UCISettings = new UCISettings(this.Output);

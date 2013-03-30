@@ -5,16 +5,42 @@ using System.Threading.Tasks;
 
 namespace Fishy.Engine
 {
-	internal class BaseUCICommander : IUCICommander
+	internal enum UCICommanderType
 	{
-		IEngineInternals _engine;
+		TimeBased,
+		ResultBased
+	}
 
-		internal BaseUCICommander (IEngineInternals engine)
+	internal abstract class UCICommander : IUCICommander
+	{
+		public static IUCICommander Create (UCICommanderType type, IEngineInternals engine)
+		{
+			switch (type) {
+
+			case UCICommanderType.TimeBased:
+				return new TimeBasedCommander (engine);
+			case UCICommanderType.ResultBased:
+				return new ResultBasedCommander (engine);
+
+			default:
+				throw new InvalidProgramException ();
+			}
+		}
+
+		protected IEngineInternals _engine;
+
+		internal UCICommander (IEngineInternals engine)
 		{
 			_engine = engine;
 		}
 
-		internal void SendCommand (string command)
+		public async Task EnableUCIModeAsync ()
+		{
+			SendCommand ("uci");
+			await For ("uciok");
+		}
+
+		protected void SendCommand (string command)
 		{
 			_engine.CommandChannel.WriteLine ("stop");
 			_engine.CommandChannel.WriteLine (command);
@@ -22,32 +48,58 @@ namespace Fishy.Engine
 			_engine.EngineProcess.WaitForInputIdle ();
 		}
 
-		public async Task PutInUCIModeAsync ()
+		protected Task For (string what)
 		{
-			SendCommand ("uci");
-			await For ("uciok");
+			return Task.Run ( () => {
+				while(!_engine.Output.Contains (what))
+					;
+			});
 		}
-		
-		public async Task AnalyseForBestMoveAsync (string fen, int duration)
+
+		public abstract Task AnalyseForBestMoveAsync (string fen, int duration);
+
+		public abstract Task AnalyseMoveAsync (string fen, string move, int duration);
+	}
+
+	internal class TimeBasedCommander : UCICommander
+	{
+		public TimeBasedCommander (IEngineInternals engine) : base(engine)
+		{
+		}
+
+		public override async Task AnalyseForBestMoveAsync (string fen, int duration)
 		{
 			SendCommand ("position fen " + fen);
 			SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
 			SendCommand ("stop"); await For ("bestmove");
 		}
 		
-		public async Task AnalyseMoveAsync (string fen, string move, int duration)
+		public override async Task AnalyseMoveAsync (string fen, string move, int duration)
 		{
 			SendCommand ("position fen " + fen);
 			SendCommand ("go infinite " + "searchmoves " + move); Thread.Sleep (duration * 1000);
 			SendCommand ("stop"); await For ("bestmove");
 		}
+	}
 
-		private Task For (string what)
+	internal class ResultBasedCommander : UCICommander
+	{
+		public ResultBasedCommander (IEngineInternals engine) : base(engine)
 		{
-			return Task.Run ( () => {
-				while(!_engine.Output.Contains (what))
-					;
-			});
+		}
+
+		public override async Task AnalyseForBestMoveAsync (string fen, int duration)
+		{
+			SendCommand ("position fen " + fen);
+			SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
+			SendCommand ("stop"); await For ("bestmove");
+		}
+		
+		public override async Task AnalyseMoveAsync (string fen, string move, int duration)
+		{
+			SendCommand ("position fen " + fen);
+			SendCommand ("go infinite " + "searchmoves " + move); Thread.Sleep (duration * 1000);
+			SendCommand ("stop"); await For ("bestmove");
 		}
 	}
 }
