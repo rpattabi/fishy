@@ -1,17 +1,22 @@
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Fishy.Engine
 {
+	internal interface IEngineInternals
+	{
+		Process EngineProcess { get; }
+		StreamWriter CommandChannel { get; }
+		string Output { get; }
+	}
+
 	public interface IEngine
 	{
 		void Start();
 		void Quit();
 		bool IsStarted { get; }
-
-		string Output { get; }
-		void ClearOutput();
 	}
 
 	public interface IUCIEngine : IEngine
@@ -24,9 +29,16 @@ namespace Fishy.Engine
 		IScore GetScore(string fen, string move);
 	}
 
+	internal interface IUCICommander
+	{
+		Task PutInUCIModeAsync();
+
+		Task AnalyseForBestMoveAsync(string fen, int duration);
+		Task AnalyseMoveAsync(string fen, string move, int duration);
+	}
+
 	public interface IScore
 	{
 		double Value { get; }
 	}
 }
-

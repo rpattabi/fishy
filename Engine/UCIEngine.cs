@@ -63,45 +63,27 @@ namespace Fishy.Engine
 			return new UCIEngine (new ProcessStartInfo ("stockfish")) as IUCIEngine;
 		}
 
+		BaseUCICommander _commander;
+
 		internal UCIEngine (ProcessStartInfo engineStartInfo) : base(engineStartInfo)
 		{
+			_commander = new BaseUCICommander(this);
 		}
 
-		internal StreamWriter ToEngine {
-			get {
-				return this.EngineProcess.StandardInput;
-			}
-		}
-
-		internal void Prepare ()
+		private void PrepareEngineForNewCommand ()
 		{
 			if (!this.IsStarted) 
 				this.Start ();
 
-			this.ClearOutput ();
-			this.EngineProcess.BeginOutputReadLine ();
-		}
-
-		internal void SendCommand (string command)
-		{
-			this.ToEngine.WriteLine ("stop");
-			this.ToEngine.WriteLine (command);
-			this.EngineProcess.WaitForInputIdle ();
+			this.ResetOutput ();
 		}
 
 		public string GiveBestMove (string fen)
 		{
-			Prepare ();
+			PrepareEngineForNewCommand ();
 
-			var task = GiveBestMoveAsync (fen, this.ThinkingDuration);
-			return task.Result;
-		}
-
-		internal async Task<string> GiveBestMoveAsync (string fen, int duration)
-		{
-			SendCommand ("position fen " + fen);
-			SendCommand ("go infinite"); Thread.Sleep (duration * 1000);
-			SendCommand ("stop"); await For ("bestmove");
+			var task = _commander.AnalyseForBestMoveAsync (fen, this.ThinkingDuration);
+			task.Wait ();
 
 			return ExtractBestMove (this.Output);
 		}
@@ -120,40 +102,22 @@ namespace Fishy.Engine
 			return Score.Create (scoreLine);
 		}
 
-		internal Task For (string what)
-		{
-			return Task.Run ( ()=> {while(!this.Output.Contains (what)); } );
-		}
-
 		internal void PutInUCIMode ()
 		{
-			Prepare ();
+			PrepareEngineForNewCommand ();
 
-			var task = PutInUCIModeAsync ();
-			this.UCISettings = new UCISettings(task.Result);
-		}
+			var task = _commander.PutInUCIModeAsync ();
+			task.Wait ();
 
-		internal async Task<string> PutInUCIModeAsync ()
-		{
-			SendCommand ("uci");
-			await For ("uciok");
-
-			return this.Output;
+			this.UCISettings = new UCISettings(this.Output);
 		}
 
 		public IScore GetScore (string fen, string move)
 		{
-			Prepare ();
+			PrepareEngineForNewCommand ();
 
-			var task = GetScoreAsync (fen, move, this.ThinkingDuration);
-			return task.Result;
-		}
-
-		internal async Task<IScore> GetScoreAsync (string fen, string move, int duration)
-		{
-			SendCommand ("position fen " + fen);
-			SendCommand ("go infinite " + "searchmoves " + move); Thread.Sleep (duration * 1000);
-			SendCommand ("stop"); await For ("bestmove");
+			var task = _commander.AnalyseMoveAsync (fen, move, this.ThinkingDuration);
+			task.Wait ();
 
 			return ExtractScore (this.Output);
 		}

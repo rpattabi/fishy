@@ -6,7 +6,7 @@ using Fishy.Engine.Exceptions;
 
 namespace Fishy.Engine
 {
-	public abstract class BaseEngine : IEngine
+	public abstract class BaseEngine : IEngine, IEngineInternals
 	{
 		ProcessStartInfo _engineStartInfo;
 
@@ -34,7 +34,6 @@ namespace Fishy.Engine
 				this.EngineProcess.OutputDataReceived += OutputReceived;
 
 				if (success) this.EngineProcess.WaitForInputIdle ();
-
 
 			} catch (System.ComponentModel.Win32Exception ex) {
 				throw new EngineCouldNotBeStartedException(_engineStartInfo.FileName, ex);
@@ -70,7 +69,19 @@ namespace Fishy.Engine
 
 		public bool IsStarted { get; set; }
 
-		internal Process EngineProcess { get; private set; }
+		public Process EngineProcess { get; private set; }
+
+		public StreamWriter CommandChannel {
+			get {
+				return this.EngineProcess.StandardInput;
+			}
+		}
+
+		protected void ResetOutput ()
+		{
+			_engineOutput.Clear ();
+			this.EngineProcess.BeginOutputReadLine ();
+		}
 
 		internal void UpdateEngineStartInfo ()
 		{
@@ -107,11 +118,6 @@ namespace Fishy.Engine
 
 				return _engineOutput.ToString ();
 			}				
-		}
-
-		public void ClearOutput ()
-		{
-			_engineOutput.Clear ();
 		}
 	}
 }

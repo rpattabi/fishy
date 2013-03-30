@@ -44,6 +44,7 @@
     <Compile Include="BaseEngine.cs" />
     <Compile Include="UCISettings.cs" />
     <Compile Include="Score.cs" />
+    <Compile Include="UCICommander.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
