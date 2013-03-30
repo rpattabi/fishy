@@ -8,46 +8,62 @@ using Fishy.Engine;
 
 namespace Fishy.CommandLine
 {
-	public class Fishy
+
+	public class FishyArgs
 	{
 		string[] _args;
+		OptionSet _options;
 
-		string _fen;
-		int _duration;
-		string _move;
+ 		const int DefaultThinkingTime = 20;
 
- 		const int DefaultDuration = 20;
+		public bool ShowHelp { get; internal set; }
+		public string Position { get; internal set; }
+		public string Move { get; internal set; }
+		public int ThinkingTime { get; internal set; }
 
-		bool _showHelp;
-		OptionSet _options; 
+		public bool NeedScore {
+			get {
+				if (this.ShowHelp) 
+					return false;
 
-		IUCIEngine _engine;
+				return (!string.IsNullOrEmpty (this.Position)
+				        && !string.IsNullOrEmpty (this.Move));
+			}
+		}
 
-		public Fishy (string[] args, IUCIEngine uciEngine)
+		public bool NeedBestMove {
+			get {
+				if (this.ShowHelp || this.NeedScore)
+					return false;
+
+				return !string.IsNullOrEmpty (this.Position);
+			}
+		}
+
+		public FishyArgs (string[] args)
 		{
 			_args = args;
-			_engine = uciEngine;
-			_duration = DefaultDuration;
+			this.ThinkingTime = DefaultThinkingTime;
 
-			_options = new OptionSet() {
+			_options = new OptionSet () {
 				"Usage:",
 				"",
 				"Options:",
 				{ "fen=", "position to analyse in {FEN} notation.",
-					v => _fen = v },
+					v => this.Position = v },
 				{ "move=", "move to analyse for the given position.",
-					v => _move = v },
+					v => this.Move = v },
 				{ "d|duration=", "{DURATION} in seconds to analyze per position. If not given, defaults to 20 seconds.", 
-					(int v) => _duration = v },
+					(int v) => this.ThinkingTime = v },
 				{ "h|?|help", "show this message and exit",
-					v => _showHelp = v != null },
+					v => this.ShowHelp = v != null },
 			};
 
 			try {
 				_options.Parse (_args);
 
-				if (string.IsNullOrEmpty (_fen))
-					_showHelp = true;
+				if (string.IsNullOrEmpty (this.Position))
+					this.ShowHelp = true;
 				
 			} catch (OptionException e) {
 				Console.Write ("fishy: ");
@@ -55,19 +71,41 @@ namespace Fishy.CommandLine
 				Console.WriteLine ("Try `fishy --help` for more information.");
 				return;
 			}
+
+		}
+
+		public string GetUsage ()
+		{
+			var stringWriter = new StringWriter();
+			_options.WriteOptionDescriptions (stringWriter);
+			return stringWriter.ToString ();
+		}	
+	}
+
+	public class Fishy
+	{
+		FishyArgs _args;
+		IUCIEngine _engine;
+
+		public Fishy (FishyArgs args, IUCIEngine uciEngine)
+		{
+			_args = args;
+			_engine = uciEngine;
 		}
 
 		public string Run ()
 		{
 			try {
-				if (_showHelp) {
-					return GetUsage();
-				}
+				if (_args.ShowHelp)
+					return _args.GetUsage();
 
-				if (!string.IsNullOrEmpty (_fen) && !string.IsNullOrEmpty (_move))
-					return GetScore(_fen, _move);
-				else
-					return GetBestMove(_fen, _duration);
+				if (_args.NeedBestMove)
+					return GetBestMove(_args.Position, _args.ThinkingTime);
+
+				if (_args.NeedScore)
+					return GetScore(_args.Position, _args.Move);
+
+				return _args.GetUsage ();
 			
 			} finally {
 				if (_engine != null)
@@ -75,21 +113,14 @@ namespace Fishy.CommandLine
 			}
 		}
 
-		internal string GetUsage ()
-		{
-			var stringWriter = new StringWriter();
-			_options.WriteOptionDescriptions (stringWriter);
-			return stringWriter.ToString ();
-		}
-
 		internal string GetBestMove (string fen, int duration)
 		{
-			return this.Engine.GiveBestMove (_fen, _duration);
+			return this.Engine.GiveBestMove (fen, duration);
 		}
 
 		internal string GetScore (string fen, string move)
 		{
-			return this.Engine.GetScore (_fen, _move).ToString ();
+			return this.Engine.GetScore (fen, move).ToString ();
 		}
 
 		internal IUCIEngine Engine {
