@@ -113,5 +113,37 @@ namespace Fishy.Tests.UnitTests
 			bestMove = fishy.Run ();
 			Assert.AreEqual (expected, bestMove);
 		}
+
+		[Test]
+		public void DurationDefaultsTo_20Seconds ()
+		{
+			string fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			string[] args = {"-fen", fen};
+
+			var fishy = new Fishy.CommandLine.Fishy(args, _engine);
+			fishy.Run ();
+
+			_uciMock.Verify (e => e.GiveBestMove(fen, 20), Times.Once());
+		}
+
+		[Test]
+		public void UseDuration_IfSpecified ()
+		{
+			int duration = 5;
+			string fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			string[] args = {"-fen", fen, "-duration", duration.ToString ()};
+
+			var fishy = new Fishy.CommandLine.Fishy(args, _engine);
+			fishy.Run ();
+
+			_uciMock.Verify (e => e.GiveBestMove(fen, duration), Times.Once());
+
+			duration = 25;
+			args[3] = duration.ToString ();
+			fishy = new Fishy.CommandLine.Fishy(args, _engine);
+			fishy.Run ();
+
+			_uciMock.Verify (e => e.GiveBestMove(fen, duration), Times.Once());
+		}
 	}
 }
