@@ -145,5 +145,34 @@ namespace Fishy.Tests.UnitTests
 
 			_uciMock.Verify (e => e.GiveBestMove(fen, duration), Times.Once());
 		}
+
+		[Test]
+		public void ReturnScore_GivePositionAndAMove ()
+		{
+			string fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			string move= "e5e8";
+
+			string[] args = {"-fen", fen, "-move", move};
+
+			// centipawns score
+			IScore score = Score.Create ("info depth 19 seldepth 26 score cp 44 nodes 10051581 nps 1911310 time 5259");
+
+			_uciMock.Setup (e => e
+                .GetScore (It.IsAny<string> (), It.IsAny<string> ()))
+				.Returns (() => score);
+
+			var fishy = new Fishy.CommandLine.Fishy (args, _engine);
+			string output = fishy.Run ();
+
+			Assert.AreEqual("44", output);
+
+			// mate score
+			score = Score.Create ("info depth 19 seldepth 26 score mate 4 nodes 10051581 nps 1911310 time 5259");
+
+			fishy = new Fishy.CommandLine.Fishy (args, _engine);
+			output = fishy.Run ();
+
+			Assert.AreEqual("#4", output);
+		}
 	}
 }
