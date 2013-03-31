@@ -38,6 +38,10 @@ namespace Fishy.Engine
 		public async Task EnableUCIModeAsync ()
 		{
 			SendCommand ("uci"); await For ("uciok");
+
+			SendCommand ("setoption name Use Search Log value true");
+			SendCommand ("setoption name Search Log Filename value /tmp/stockfish.log");
+			SendCommand ("isready"); await For ("readyok");
 		}
 
 		protected void SendCommand (string command)
@@ -125,6 +129,7 @@ namespace Fishy.Engine
 				// Not concerned about Thinking Duration
 			}
 		}
+
 		public override async Task AnalyseForBestMoveAsync (string fen)
 		{
 			SendCommand ("position fen " + fen);
