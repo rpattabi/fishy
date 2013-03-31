@@ -8,7 +8,6 @@ using Fishy.Engine;
 
 namespace Fishy.CommandLine
 {
-
 	public class FishyArgs
 	{
 		string[] _args;
@@ -76,10 +75,9 @@ namespace Fishy.CommandLine
 					this.ShowHelp = true;
 				
 			} catch (OptionException e) {
-				Console.Write ("fishy: ");
-				Console.WriteLine (e.Message);
-				Console.WriteLine ("Try `fishy --help` for more information.");
-				return;
+				throw new OptionException("fishy: " + Environment.NewLine +
+				                          e.Message + Environment.NewLine +
+				                          "Try `fishy --help` for more information.", e.OptionName);
 			}
 		}
 

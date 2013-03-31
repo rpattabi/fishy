@@ -48,4 +48,14 @@ mono fishy.exe -fen "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1" -duration 5
 mono fishy.exe -fen "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1" -move d5c7 -duration 3
 mono fishy.exe -fen "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" -move e2e4 -duration 4
 
+# depth instead of duration
+
+mono fishy.exe -fen "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1" -depth 5
+mono fishy.exe -fen "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1" -move d5c7 -depth 20
+mono fishy.exe -fen "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" -move e2e4 -depth 8
+
+# mate search
+
+# mate in two
+mono fishy.exe -fen "8/8/8/B7/4p3/1Q6/1K2kp2/3R4 w - - 0 1" -mate 2
 */
