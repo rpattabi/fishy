@@ -182,5 +182,40 @@ namespace Fishy.Tests.UnitTests
 
 			Assert.AreEqual("#4", output);
 		}
+
+		[Test]
+		public void DepthTakesPrecedence_OverDuration ()
+		{
+			string fen = "k2r4/pp6/8/3NQ3/8/8/3q1PPP/6K1 w - - 0 1";
+			string move = "e5e8";
+
+			string[] args = {"-fen", fen, "-move", move, "-depth", "5", "-duration", "30"};
+			var fishyArgs = new FishyArgs (args);
+			IUCIEngine engine = UCIEngine.Create (EngineKey.Stockfish);
+
+			new Fishy.CommandLine.Fishy (fishyArgs, engine);
+
+			Assert.AreEqual (UCIAnalysisType.ResultBased, engine.AnalysisMode);
+
+			// order shouldn't matter either
+
+			args = new string[] {"-fen", fen, "-move", move, "-duration", "30", "-depth", "5"};
+			fishyArgs = new FishyArgs (args);
+			engine = UCIEngine.Create (EngineKey.Stockfish);
+
+			new Fishy.CommandLine.Fishy (fishyArgs, engine);
+
+			Assert.AreEqual (UCIAnalysisType.ResultBased, engine.AnalysisMode);
+			
+			// values shouldn't matter
+
+			args = new string[] {"-fen", fen, "-move", move, "-depth", "5", "-duration", "5"};
+			fishyArgs = new FishyArgs (args);
+			engine = UCIEngine.Create (EngineKey.Stockfish);
+
+			new Fishy.CommandLine.Fishy (fishyArgs, engine);
+
+			Assert.AreEqual (UCIAnalysisType.ResultBased, engine.AnalysisMode);		
+		}
 	}
 }

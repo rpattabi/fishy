@@ -97,10 +97,7 @@ namespace Fishy.CommandLine
 		public Fishy (FishyArgs args, IUCIEngine uciEngine)
 		{
 			_args = args;
-
-			_engine = uciEngine;
-			_engine.ThinkingDuration = _args.ThinkingDuration;
-			_engine.Depth = _args.Depth;
+			InitEngine (uciEngine);
 		}
 
 		public string Run ()
@@ -141,6 +138,19 @@ namespace Fishy.CommandLine
 
 				return _engine;
 			}
+		}
+
+		private void InitEngine (IUCIEngine uciEngine)
+		{
+			_engine = uciEngine;
+
+			if (_args.IsDepthMode)
+				_engine.AnalysisMode = UCIAnalysisType.ResultBased;
+			else
+				_engine.AnalysisMode = UCIAnalysisType.TimeBased;
+
+			_engine.ThinkingDuration = _args.ThinkingDuration;
+			_engine.Depth = _args.Depth;
 		}
 	}
 }
