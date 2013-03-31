@@ -57,7 +57,7 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 				var timer = new Stopwatch();
 				timer.Start();
 
-				while (timer.ElapsedMilliseconds <= 5 * 1000)
+				while (timer.ElapsedMilliseconds <= 3 * 1000)
 					Assert.IsFalse (stockfish.EngineProcess.HasExited);
 
 				timer.Stop ();			
@@ -190,7 +190,7 @@ namespace Fishy.Tests.UnitTests.EngineProcess
 
 			try {
 				stockfish.AnalysisMode = UCIAnalysisType.ResultBased;
-				stockfish.Depth = 20;
+				stockfish.Depth = 9;
 
 				Internal_GivenPositionAndAMove_ReturnScore (stockfish);
 

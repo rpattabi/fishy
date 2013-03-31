@@ -10,14 +10,13 @@ namespace Fishy.Engine
 	{
 		ProcessStartInfo _engineStartInfo;
 
-		StringBuilder _engineOutput;
+		object _syncRoot = new object();
+		StringBuilder _engineOutput = new StringBuilder();//TODO: Fixed Capacity?
 
 		public BaseEngine(ProcessStartInfo engineStartInfo)
 		{
 			_engineStartInfo = engineStartInfo;
 			UpdateEngineStartInfo();
-
-			_engineOutput = new StringBuilder(); //TODO: Fixed Capacity?
 		}
 
 		public virtual void Start ()
@@ -79,7 +78,10 @@ namespace Fishy.Engine
 
 		protected void ResetOutput ()
 		{
-			_engineOutput.Clear ();
+			lock (_syncRoot) {
+				_engineOutput.Clear ();
+			}
+
 			this.EngineProcess.BeginOutputReadLine ();
 		}
 
@@ -98,7 +100,9 @@ namespace Fishy.Engine
 
 		public void OutputReceived (object sender, DataReceivedEventArgs eventArgs)
 		{
-			_engineOutput.AppendLine(TimeStamp() +  eventArgs.Data);
+			lock (_syncRoot) {
+				_engineOutput.AppendLine (TimeStamp () + eventArgs.Data);
+			}
 
 			//using (var log = new StreamWriter ("/tmp/stockfish.log", append: true)) {
 			//	log.WriteLine (TimeStamp() + eventArgs.Data);
@@ -116,7 +120,9 @@ namespace Fishy.Engine
 				//	log.Write (TimeStamp() + _engineOutput.ToString ());
 				//}
 
-				return _engineOutput.ToString ();
+				lock (_syncRoot) {
+					return _engineOutput.ToString ();
+				}
 			}				
 		}
 	}
