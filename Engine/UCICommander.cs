@@ -41,6 +41,7 @@ namespace Fishy.Engine
 
 			SendCommand ("setoption name Use Search Log value true");
 			SendCommand ("setoption name Search Log Filename value /tmp/stockfish.log");
+
 			SendCommand ("isready"); await For ("readyok");
 		}
 
@@ -92,16 +93,20 @@ namespace Fishy.Engine
 
 		public override async Task AnalyseForBestMoveAsync (string fen)
 		{
-			SendCommand ("position fen " + fen);
+			SendCommand ("ucinewgame");
+			SendCommand ("isready"); await For ("readyok");
 
+			SendCommand ("position fen " + fen);
 			SendCommand ("go movetime " + 
 			             _thinkingTime * 1000); await For ("bestmove");
 		}
 		
 		public override async Task AnalyseMoveAsync (string fen, string move)
 		{
-			SendCommand ("position fen " + fen);
+			SendCommand ("ucinewgame");
+			SendCommand ("isready"); await For ("readyok");
 
+			SendCommand ("position fen " + fen);
 			SendCommand ("go movetime " + 
 			             _thinkingTime * 1000 + 
 			             " searchmoves " + move); await For ("bestmove");
@@ -132,12 +137,18 @@ namespace Fishy.Engine
 
 		public override async Task AnalyseForBestMoveAsync (string fen)
 		{
+			SendCommand ("ucinewgame");
+			SendCommand ("isready"); await For ("readyok");
+
 			SendCommand ("position fen " + fen);
 			SendCommand ("go depth " + _depth); await For ("bestmove");
 		}
 		
 		public override async Task AnalyseMoveAsync (string fen, string move)
 		{
+			SendCommand ("ucinewgame");
+			SendCommand ("isready"); await For ("readyok");
+
 			SendCommand ("position fen " + fen);
 			SendCommand ("go depth " + _depth + " searchmoves " + move); await For ("bestmove");
 		}

@@ -1,16 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/Engine/UCICommander.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="fishy/UnitTests/Engine.cs">
     <Files>
       <File FileName="fishy/Engine/UCIEngine.cs" Line="157" Column="1" />
       <File FileName="fishy/Engine/Interfaces.cs" Line="12" Column="3" />
       <File FileName="fishy/Engine/UCICommander.cs" Line="45" Column="3" />
-      <File FileName="fishy/Engine/BaseEngine.cs" Line="80" Column="25" />
-      <File FileName="fishy/UnitTests/Engine.cs" Line="50" Column="23" />
-      <File FileName="../../../opt/mono-3.0/mono/mcs/class/corlib/System.Threading/Thread.cs" Line="411" Column="1" />
+      <File FileName="fishy/Engine/BaseEngine.cs" Line="124" Column="13" />
+      <File FileName="fishy/UnitTests/Engine.cs" Line="121" Column="3" />
+      <File FileName="../../../opt/mono-3.0/mono/mcs/class/corlib/System.Threading/Thread.cs" Line="420" Column="1" />
       <File FileName="../../../opt/mono-3.0/mono/mcs/class/System/System.Net.Sockets/Socket_2_1.cs" Line="1329" Column="1" />
       <File FileName="../../../opt/mono-3.0/mono/mcs/class/System/System.Net.Sockets/Socket.cs" Line="545" Column="1" />
       <File FileName="../../../opt/mono-3.0/mono/mcs/class/corlib/System.Globalization/CompareInfo.cs" Line="591" Column="1" />
+      <File FileName="../../../opt/mono-3.0/mono/mcs/class/System/System.Diagnostics/Process.cs" Line="1483" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -19,11 +20,10 @@
             <Node name="References" expanded="True" />
             <Node name="Mono.Options" expanded="True" />
           </Node>
-          <Node name="Engine" expanded="True">
-            <Node name="UCICommander.cs" selected="True" />
-          </Node>
+          <Node name="Engine" expanded="True" />
           <Node name="UnitTests" expanded="True">
             <Node name="References" expanded="True" />
+            <Node name="Engine.cs" selected="True" />
           </Node>
         </State>
       </Pad>
